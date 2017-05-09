@@ -1,4 +1,4 @@
-require 'rest-client'
+
 class RedditApi
 
   #ALL_URL = "https://api.reddit.com/.json"
@@ -7,7 +7,7 @@ class RedditApi
     posts = []
     api = JSON.parse(RestClient.get("https://reddit.com/.json"))
     api["data"]["children"].each do |post|
-      posts << 
+      posts <<
       {
       post_id: post["data"]["name"],
       title: post["data"]["title"],
@@ -46,7 +46,7 @@ class RedditApi
     api = JSON.parse(RestClient.get("https://api.reddit.com/r/#{post[:subreddit]}/comments/#{post[:id]}?sort=top/.json"))
 
     api["data"]["children"].each do |comment|
-      comments << 
+      comments <<
       {
         name: comment["data"]["name"],
         parent_id: comment["data"]["parent_id"],
