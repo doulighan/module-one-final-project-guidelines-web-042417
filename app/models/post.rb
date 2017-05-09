@@ -5,4 +5,5 @@ class Post < ActiveRecord::Base
   foreign_key: :post_id
   belongs_to :user
 
+
 end

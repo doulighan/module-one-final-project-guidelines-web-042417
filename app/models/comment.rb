@@ -84,4 +84,3 @@ return [c6]
 # [] + [c5] +  // "[c5.ancestors]" [c4] + "[c4.ancestors]" + [c3] + "[c3.ancestors]" + [c2] + "[c2.ancestors]" + [c1]
 # + "[c1.ancestors]"=> ancestors_array = []
 # [] + [c5] + [c4] + [c3] + [c2] + [c1]
->>>>>>> models
