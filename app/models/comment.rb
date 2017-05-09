@@ -27,8 +27,7 @@ class Comment < ActiveRecord::Base
     primary_key: :comment_id
 
   def ancestry
-    ancestors_array = []
-    return ancestors_array if self.parent.nil?
+    return [] if self.parent.nil?
     self.parent.ancestry + [self.parent]
   end
 

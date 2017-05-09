@@ -41,7 +41,7 @@ class RedditApi
 
   def self.get_comments_of_post(post)
     comments = []
-    api = JSON.parse(RestClient.get("https://api.reddit.com/r/#{post.subreddit}/comments/#{post.post_id[3..1]}?sort=top/.json"))
+    api = JSON.parse(RestClient.get("https://api.reddit.com/r/#{post.subreddit}/comments/#{post.post_id[3..1]}?count=200?sort=top/.json"))
 
     api["data"]["children"].each do |comment|
       comments <<
