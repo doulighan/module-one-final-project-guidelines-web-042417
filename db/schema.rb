@@ -17,6 +17,7 @@ ActiveRecord::Schema.define(version: 2) do
     t.string "post_id"
     t.string "body"
     t.string "author"
+    t.integer "score"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["comment_id"], name: "sqlite_autoindex_comments_1", unique: true
@@ -24,8 +25,9 @@ ActiveRecord::Schema.define(version: 2) do
 
   create_table "posts", primary_key: "post_id", id: :text, force: :cascade do |t|
     t.string "title"
-    t.string "body"
     t.string "author"
+    t.integer "score"
+    t.string "subreddit"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["post_id"], name: "sqlite_autoindex_posts_1", unique: true

@@ -7,6 +7,7 @@ class CreateComments < ActiveRecord::Migration[5.1]
       t.string :post_id
       t.string :body
       t.string :author
+      t.integer :score
       t.timestamps
     end
   end
