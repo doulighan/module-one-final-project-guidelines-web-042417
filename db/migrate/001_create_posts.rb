@@ -1,9 +1,11 @@
-class CreatePosts < ActiveRecord::Migration
+class CreatePosts < ActiveRecord::Migration[5.1]
+  
   def change
-    create_table :posts do |t|
-      t.string :title, null: false
-      t.string :body, null: false
-      t.integer :user_id
+    create_table :posts, id: false do |t|
+      t.text :post_id, primary_key: true
+      t.string :title
+      t.string :body
+      t.string :author
       t.timestamps
 
     end

@@ -10,31 +10,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 5) do
+ActiveRecord::Schema.define(version: 2) do
 
-  create_table "comments", force: :cascade do |t|
-    t.integer  "parent_id"
-    t.integer  "post_id"
-    t.string   "body"
-    t.integer  "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "post_key"
+  create_table "comments", primary_key: "comment_id", id: :text, force: :cascade do |t|
+    t.string "parent_id"
+    t.string "post_id"
+    t.string "body"
+    t.string "author"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["comment_id"], name: "sqlite_autoindex_comments_1", unique: true
   end
 
-  create_table "posts", force: :cascade do |t|
-    t.string   "title",      null: false
-    t.string   "body",       null: false
-    t.integer  "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "post_key"
-  end
-
-  create_table "users", force: :cascade do |t|
-    t.string   "username"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+  create_table "posts", primary_key: "post_id", id: :text, force: :cascade do |t|
+    t.string "title"
+    t.string "body"
+    t.string "author"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["post_id"], name: "sqlite_autoindex_posts_1", unique: true
   end
 
 end

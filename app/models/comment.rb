@@ -1,16 +1,30 @@
+# == Schema Information
+#
+# Table name: comments
+#
+#  comment_id :text             not null, primary key
+#  parent_id  :string
+#  post_id    :string
+#  body       :string
+#  author     :string
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
 
 class Comment < ActiveRecord::Base
-  belongs_to :user
-  belongs_to :post
+  belongs_to :post,
+    foreign_key: :post_id 
+
+
   has_many :children,
     class_name: "Comment",
     foreign_key: :parent_id,
-    primary_key: :id
+    primary_key: :comment_id
 
   belongs_to :parent,
     class_name: "Comment",
     foreign_key: :parent_id,
-    primary_key: :id
+    primary_key: :comment_id
 
   def ancestors
     ancestors_array = []

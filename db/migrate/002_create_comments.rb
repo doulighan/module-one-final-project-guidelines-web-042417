@@ -1,11 +1,12 @@
-class CreateComments < ActiveRecord::Migration
+class CreateComments < ActiveRecord::Migration[5.1]
 
   def change
-    create_table :comments do |t|
-      t.integer :parent_id
-      t.integer :post_id
-      t.string  :body
-      t.integer :user_id
+    create_table :comments, id: false do |t|
+      t.text :comment_id, primary_key: true
+      t.string :parent_id
+      t.string :post_id
+      t.string :body
+      t.string :author
       t.timestamps
     end
   end

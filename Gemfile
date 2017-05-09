@@ -11,3 +11,5 @@ gem 'rest-client'
 gem 'redd'
 
 gem 'json', '~> 2.1.0'
+
+gem 'annotate'
