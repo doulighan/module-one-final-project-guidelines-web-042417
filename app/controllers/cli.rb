@@ -7,10 +7,11 @@
 class CLI
 
   def self.run
-    puts "Welcome to CLI reddit"    
-    posts = RedditApi.get_hash_of_top_posts
-    #binding.pry
-    RedditApi.import_posts_to_db(posts)
+    puts "Welcome to CLI reddit" 
+#
+    p Post.first
+    RedditApi.get_comments_of_post(Post.first)
+
   end
 
 end

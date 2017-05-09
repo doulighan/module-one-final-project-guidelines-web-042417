@@ -43,7 +43,7 @@ class RedditApi
 
   def self.get_comments_of_post(post)
     comments = []
-    api = JSON.parse(RestClient.get("https://api.reddit.com/r/#{post[:subreddit]}/comments/#{post[:id]}?sort=top/.json"))
+    api = JSON.parse(RestClient.get("https://api.reddit.com/r/#{post[:subreddit]}/comments/#{post[:id]}?limit=500/.json"))
 
     api["data"]["children"].each do |comment|
       comments << 
@@ -56,9 +56,7 @@ class RedditApi
         score: comment["data"]["score"]
       }
     end
-    print_comments(comments)
     p comments.length
-    comments
   end
 
   def self.print_comments(comments)
