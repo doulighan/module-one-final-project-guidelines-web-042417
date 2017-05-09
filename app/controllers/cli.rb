@@ -1,20 +1,21 @@
-# require 'require_all'
-require_relative 'RedditApi'
-# require_relative '../app/models/comment.rb'
-# require_relative '../app/models/post.rb'
-require_relative '../../config/environment.rb'
+# # require 'require_all'
+# require_relative 'RedditApi'
+# # require_relative '../app/models/comment.rb'
+# # require_relative '../app/models/post.rb'
+# require_relative '../../config/environment.rb'
 
+class CLI
 
-
-  def run
+  def self.run
     puts "Welcome to CLI reddit"    
     posts = RedditApi.get_hash_of_top_posts
-    binding.pry
+    #binding.pry
     RedditApi.import_posts_to_db(posts)
   end
 
+end
 
-run
+
 
 # a = CLIRunner.new
 # a.run
