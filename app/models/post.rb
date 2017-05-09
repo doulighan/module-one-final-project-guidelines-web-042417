@@ -4,6 +4,5 @@ class Post < ActiveRecord::Base
   class_name: "Comment",
   foreign_key: :post_id
   belongs_to :user
-
-
+  
 end

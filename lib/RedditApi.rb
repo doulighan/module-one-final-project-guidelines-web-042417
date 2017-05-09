@@ -8,7 +8,7 @@ class RedditApi
 
   ALL_URL = "https://www.reddit.com/r/all/.json"
 
-  def get_post_info
+  def self.get_post_info
     posts = []
     api = JSON.parse(RestClient.get("https://www.reddit.com/.json"))
     api["data"]["children"].each do |post|
@@ -27,7 +27,7 @@ class RedditApi
 
 
 
-  def get_comments_of_post(post)
+  def self.get_comments_of_post(post)
     comments = []
     api = JSON.parse(RestClient.get("https://www.reddit.com/r/#{post[:subreddit]}/comments/#{post[:id]}?sort=top/.json"))
 
@@ -47,7 +47,7 @@ class RedditApi
     comments
   end
 
-  def print_comments(comments)
+  def self.print_comments(comments)
     count = 0
     comments.each do |c|
       p "score: #{c[:score]}"
@@ -58,7 +58,7 @@ class RedditApi
     end
   end
 
-  def top_comments(comments)
+  def self.top_comments(comments)
     comments.each do |c|
   end
 end
