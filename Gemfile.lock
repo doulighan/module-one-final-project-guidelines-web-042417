@@ -19,16 +19,23 @@ GEM
       unf (>= 0.0.5, < 1.0.0)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
+<<<<<<< HEAD
     httparty (0.14.0)
       multi_xml (>= 0.5.2)
+=======
+>>>>>>> e4680c39be322d2bd817c2c617528d048e84613b
     i18n (0.8.1)
+    json (2.1.0)
     method_source (0.8.2)
     mime-types (3.1)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2016.0521)
     minitest (5.10.1)
+<<<<<<< HEAD
     multi_json (1.12.1)
     multi_xml (0.6.0)
+=======
+>>>>>>> e4680c39be322d2bd817c2c617528d048e84613b
     netrc (0.11.0)
     pry (0.10.4)
       coderay (~> 1.1.0)
@@ -66,6 +73,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  json (~> 2.1.0)
   pry
   reddit
   require_all
