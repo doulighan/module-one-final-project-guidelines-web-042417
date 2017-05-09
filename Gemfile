@@ -7,3 +7,4 @@ gem "pry"
 gem "require_all"
 gem 'reddit'
 gem 'rest-client'
+gem 'redd'
