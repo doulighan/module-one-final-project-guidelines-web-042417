@@ -3,8 +3,7 @@ class CLI
   def self.run
     puts "Welcome to CLI reddit"
     puts "Here's what's trending right now"
-    sleep(2.0)
-    system("clear")
+    
     # posts = RedditApi.get_hash_of_top_posts
     # RedditApi.import_posts_to_db(posts)
     self.front_page
@@ -15,7 +14,7 @@ class CLI
      entry =  <<-heredoc
           --------------------------------------------
          #{i}. #{post.title}
-               by #{post.author}    submitted on #{post.created_at}
+               by #{post.author}    submitted #{Time.now.hour - post.created_at.hour} hours ago
       heredoc
       puts entry
     end
