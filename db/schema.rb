@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2) do
+ActiveRecord::Schema.define(version: 4) do
 
   create_table "comments", primary_key: "comment_id", id: :text, force: :cascade do |t|
     t.string "parent_id"
@@ -20,7 +20,12 @@ ActiveRecord::Schema.define(version: 2) do
     t.integer "score"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["author"], name: "index_comments_on_author"
+    t.index ["comment_id"], name: "index_comments_on_comment_id"
     t.index ["comment_id"], name: "sqlite_autoindex_comments_1", unique: true
+    t.index ["parent_id"], name: "index_comments_on_parent_id"
+    t.index ["post_id"], name: "index_comments_on_post_id"
+    t.index ["score"], name: "index_comments_on_score"
   end
 
   create_table "posts", primary_key: "post_id", id: :text, force: :cascade do |t|
@@ -30,7 +35,10 @@ ActiveRecord::Schema.define(version: 2) do
     t.string "subreddit"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["author"], name: "index_posts_on_author"
+    t.index ["post_id"], name: "index_posts_on_post_id"
     t.index ["post_id"], name: "sqlite_autoindex_posts_1", unique: true
+    t.index ["score"], name: "index_posts_on_score"
   end
 
 end

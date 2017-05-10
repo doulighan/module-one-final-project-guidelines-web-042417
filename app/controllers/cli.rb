@@ -6,11 +6,13 @@ class CLI
 
     posts = RedditApi.get_hash_of_top_posts
     post_objects = RedditApi.import_posts_to_db(posts)
+
+    self.front_page
+
     comments = post_objects.map {|post| RedditApi.get_comments_of_post(post)}
     comments.map { |comment| RedditApi.import_comments_to_db(comment)}
-    RedditApi.import_comments_to_db(comments)
-    
-    self.front_page
+
+
   end
 
   def self.front_page

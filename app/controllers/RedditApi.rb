@@ -5,7 +5,7 @@ class RedditApi
 
  def self.get_hash_of_top_posts
     posts = []
-    api = JSON.parse(RestClient.get("https://reddit.com/.json"))
+    api = JSON.parse(RestClient.get("https://api.reddit.com/"))
     api["data"]["children"].each do |post|
       posts <<
       {
@@ -13,7 +13,7 @@ class RedditApi
       title: post["data"]["title"],
       subreddit: post["data"]["subreddit"],
       author: post["data"]["author"],
-      score: post["data"]["score"]
+      score: post["data"]["score"].to_i
       }
     end
     posts
@@ -21,7 +21,11 @@ class RedditApi
 
   def self.import_posts_to_db(posts)
     posts.map do |post|
-      Post.find_or_create_by(post)
+      if Post.find_by(post_id: post[:post_id]).nil?
+        Post.create(post)
+      else
+        Post.find_by(post_id: post[:post_id])
+      end
     end
   end
 
@@ -41,8 +45,10 @@ class RedditApi
 
   def self.get_comments_of_post(post)
     comments = []
-    api = JSON.parse(RestClient.get("https://api.reddit.com/r/#{post.subreddit}/comments/#{post.post_id[3..1]}?sort=old"))
+    api = JSON.parse(RestClient.get("https://api.reddit.com/r/#{post.subreddit}/comments/#{post.post_id[3..-1]}?sort=old")).first
+    # if no .json, call .first at end
 
+    # debugger
     api["data"]["children"].each do |comment|
       comments <<
       {
@@ -51,14 +57,20 @@ class RedditApi
         post_id: comment["data"]["link_id"],
         body: comment["data"]["body"],
         author: comment["data"]["author"],
-        score: comment["data"]["score"]
+        score: comment["data"]["score"].to_i
       }
     end
     comments
   end
 
   def self.import_comments_to_db(comments)
-    comments.map {|comment| Comment.find_or_create_by(comment)}
+    comments.map do |comment|
+      if Comment.find_by(comment_id: comment[:comment_id]).nil?
+        Comment.create(comment)
+      else
+        Comment.find_by(comment_id: comment[:comment_id])
+      end
+    end
   end
 
   def self.print_comments(comments)
