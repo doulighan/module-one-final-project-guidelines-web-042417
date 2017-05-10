@@ -21,7 +21,7 @@ class RedditApi
 
   def self.import_posts_to_db(posts)
     posts.map do |post|
-      Post.create(post)
+      Post.find_or_create_by(post)
     end
   end
 
@@ -41,7 +41,7 @@ class RedditApi
 
   def self.get_comments_of_post(post)
     comments = []
-    api = JSON.parse(RestClient.get("https://api.reddit.com/r/#{post.subreddit}/comments/#{post.post_id[3..1]}?count=200?sort=top/.json"))
+    api = JSON.parse(RestClient.get("https://api.reddit.com/r/#{post.subreddit}/comments/#{post.post_id[3..1]}?sort=old"))
 
     api["data"]["children"].each do |comment|
       comments <<
@@ -58,7 +58,7 @@ class RedditApi
   end
 
   def self.import_comments_to_db(comments)
-    comments.map {|comment| Comment.create(comment)}
+    comments.map {|comment| Comment.find_or_create_by(comment)}
   end
 
   def self.print_comments(comments)
