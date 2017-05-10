@@ -32,5 +32,4 @@ class Import
       end
     end
   end
-
 end
