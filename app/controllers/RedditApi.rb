@@ -5,7 +5,7 @@ class RedditApi
 
  def self.get_hash_of_top_posts
     posts = []
-    api = JSON.parse(RestClient.get("https://reddit.com/.json"))
+    api = JSON.parse(RestClient.get("https://reddit.com/.json?limit=100"))
     api["data"]["children"].each do |post|
       posts <<
       {

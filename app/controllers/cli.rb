@@ -4,8 +4,8 @@ class CLI
     puts "Welcome to CLI reddit"
     puts "Here's what's trending right now"
     
-    # posts = RedditApi.get_hash_of_top_posts
-    # RedditApi.import_posts_to_db(posts)
+    posts = RedditApi.get_hash_of_top_posts
+    RedditApi.import_posts_to_db(posts)
     self.front_page
   end
 
