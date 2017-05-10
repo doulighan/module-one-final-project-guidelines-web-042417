@@ -1,11 +1,8 @@
 
 class RedditApi
 
-  #ALL_URL = "https://api.reddit.com/.json"
-
  def self.get_hash_of_top_posts
     api = JSON.parse(RestClient.get("https://api.reddit.com/.json?limit=5"))
-
     api["data"]["children"].map do |post|
       {
       post_id: post["data"]["name"],
