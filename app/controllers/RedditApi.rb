@@ -1,13 +1,9 @@
 
 class RedditApi
 
-  #ALL_URL = "https://api.reddit.com/.json"
-
  def self.get_hash_of_top_posts
-    posts = []
-    api = JSON.parse(RestClient.get("https://reddit.com/.json?limit=5"))
-    api["data"]["children"].each do |post|
-      posts <<
+    api = JSON.parse(RestClient.get("https://api.reddit.com/.json?limit=5"))
+    api["data"]["children"].map do |post|
       {
       post_id: post["data"]["name"],
       title: post["data"]["title"],
@@ -16,14 +12,11 @@ class RedditApi
       score: post["data"]["score"]
       }
     end
-    posts
   end
 
   def self.get_hash_of_comments(post)
-    comments = []
     api = JSON.parse(RestClient.get("https://api.reddit.com/r/#{post.subreddit}/comments/#{post.post_id[3..-1]}?sort=old.json"))
-    api[0]["data"]["children"].each do |comment|
-      comments <<
+    api[0]["data"]["children"].map do |comment|
       {
         comment_id: comment["data"]["name"],
         parent_id: comment["data"]["parent_id"],
@@ -33,9 +26,7 @@ class RedditApi
         score: comment["data"]["score"].to_i
       }
     end
-    comments
   end
-
 end
 
 

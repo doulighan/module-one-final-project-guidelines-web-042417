@@ -1,7 +1,7 @@
 
 class Display
 
-  def self.top_posts(limit=5)
+  def self.top_posts(limit=10)
    
     Post.limit(limit).each do |post, i|
      entry =  <<-heredoc
