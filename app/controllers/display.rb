@@ -3,11 +3,15 @@ class Display
   def self.top_posts(limit=10)
     Post.limit(limit).each do |post, i|
      entry =  <<-heredoc
-          --------------------------------------------
-         #{i}. #{post.title}
-               by #{post.author}    submitted #{Time.now.hour - post.created_at.hour} hours ago
+---------------------------------------------------------------------------------
+    #{i}. #{post.title}
+    by #{post.author}    submitted #{Time.now.hour - post.created_at.hour} hours ago
       heredoc
       puts entry
     end
+  end
+
+  def self.display_comments(page)
+  
   end
 end

@@ -21,7 +21,7 @@ class Import
 
 
   def self.comments_to_database(post_objects, num_comments=25)
-    comments = post_objects.map { |post| RedditApi.get_hash_of_comments(post) }
+    comments = post_objects.map { |post| RedditApi.parsehelper(post) }
     comments.map do |comments_page|
       comments_page.map do |comment|
         if Comment.find_by(comment_id: comment[:comment_id]).nil?
