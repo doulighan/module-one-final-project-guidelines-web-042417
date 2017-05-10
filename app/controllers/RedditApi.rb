@@ -56,8 +56,7 @@ class RedditApi
         score: comment["data"]["score"]
       }
     end
-    print_comments(comments)
-    p comments.length
+    binding.pry
     comments
   end
 
