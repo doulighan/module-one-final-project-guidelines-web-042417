@@ -13,7 +13,7 @@
 
 class Comment < ActiveRecord::Base
   belongs_to :post,
-    foreign_key: :post_id 
+    foreign_key: :post_id
 
 
   has_many :children,
@@ -26,15 +26,14 @@ class Comment < ActiveRecord::Base
     foreign_key: :parent_id,
     primary_key: :comment_id
 
-  def ancestors
-    ancestors_array = []
-    return ancestors_array if self.parent_id.nil?
-    self.parent.ancestors + [self.parent]
+  def ancestry
+    return [] if self.parent.nil?
+    self.parent.ancestry + [self.parent]
   end
 
   def descendants
     return [] if self.children.empty?
-    self.children + self.children.map { |child| child.all_descendants }
+    self.children + self.children.map { |child| child.descendants }.flatten
   end
 end
 

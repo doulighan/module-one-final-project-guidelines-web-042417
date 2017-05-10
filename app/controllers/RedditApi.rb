@@ -5,7 +5,7 @@ class RedditApi
 
  def self.get_hash_of_top_posts
     posts = []
-    api = JSON.parse(RestClient.get("https://reddit.com/.json?limit=100"))
+    api = JSON.parse(RestClient.get("https://reddit.com/.json?limit=10"))
     api["data"]["children"].each do |post|
       posts <<
       {
@@ -13,29 +13,21 @@ class RedditApi
       title: post["data"]["title"],
       subreddit: post["data"]["subreddit"],
       author: post["data"]["author"],
-      num_comments: post["data"]["num_comments"],
-      score: post["data"]["score"],
-      body: "niil"
+      score: post["data"]["score"]
       }
     end
     posts
   end
 
   def self.import_posts_to_db(posts)
-    posts.each do |post|
-      Post.create(title: post[:title], body: post[:body], author: post[:author], post_id: post[:post_id])
+    posts.map do |post|
+      if Post.find_by(post_id: post[:post_id]).nil? 
+        Post.create(post)
+      else
+        Post.find_by(post_id: post[:post_id])
+      end
     end
   end
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -43,23 +35,35 @@ class RedditApi
 
   def self.get_comments_of_post(post)
     comments = []
-    api = JSON.parse(RestClient.get("https://api.reddit.com/r/#{post[:subreddit]}/comments/#{post[:id]}?sort=top/.json"))
+    s = "https://api.reddit.com/r/#{post.subreddit}/comments/#{post.post_id[3..1]}.json"
+
+    api = JSON.parse(RestClient.get("https://api.reddit.com/r/#{post.subreddit}/comments/#{post.post_id[3..1]}.json"))
 
     api["data"]["children"].each do |comment|
       comments <<
       {
-        name: comment["data"]["name"],
+        comment_id: comment["data"]["name"],
         parent_id: comment["data"]["parent_id"],
-        link_id: comment["data"]["link_id"],
+        post_id: comment["data"]["link_id"],
         body: comment["data"]["body"],
         author: comment["data"]["author"],
         score: comment["data"]["score"]
       }
     end
-    print_comments(comments)
-    p comments.length
     comments
   end
+
+  def self.import_comments_to_db(comments)
+     comments.map do |comment|
+      if Comment.find_by(comment_id: comment[:comment_id]).nil? 
+        Comment.create(comment)
+      else
+        Comment.find_by(comment_id: comment[:comment_id])
+      end
+    end
+  end
+
+
 
   def self.print_comments(comments)
     count = 0
