@@ -2,17 +2,13 @@ class Import
 
 
   def self.to_database
-    
-    posts_objects = posts_to_database
+    post_objects = posts_to_database
     comments_to_database(post_objects)
-
-
-  
   end
 
+  
   private 
 
-  #returns posts as Post objects
   def self.posts_to_database
     posts = RedditApi.get_hash_of_top_posts
     posts.map do |post|
@@ -25,10 +21,9 @@ class Import
   end
 
 
-
   def self.comments_to_database(post_objects, num_comments=25)
     comments = post_objects.map { |post| RedditApi.get_hash_of_comments(post) }
-    comments.map do |comment_page| 
+    comments.map do |comments_page| 
       comments_page.map do |comment|
         if Comment.find_by(comment_id: comment[:comment_id]).nil? 
           Comment.create(comment)
@@ -38,7 +33,6 @@ class Import
       end
     end
   end
-
 end
 
   
