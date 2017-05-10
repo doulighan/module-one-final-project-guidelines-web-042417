@@ -10,11 +10,8 @@ class CLI
     puts "Here's what's trending right now"
 
 
-    Display.top_posts(5)
+    Display.top_posts(20)
     
-
-
-
   end
 
 
