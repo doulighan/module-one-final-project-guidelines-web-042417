@@ -8,7 +8,7 @@ class CreateComments < ActiveRecord::Migration[5.1]
       t.string :body
       t.string :author
       t.integer :score
-      t.timestamps
+      
     end
   end
 end
