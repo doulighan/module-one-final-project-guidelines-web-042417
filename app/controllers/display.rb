@@ -11,9 +11,11 @@ class Display
     puts ""
   end
 
-  def self.top_posts(limit=10)
+  def self.top_posts(origin=Post)
+    if origin != Post
+      origin = origin.posts
     result = {}
-    Post.limit(limit).each_with_index do |post, i|
+    origin.limit(5).each_with_index do |post, i|
      entry =  <<-heredoc
 ---------------------------------------------------------------------------------
     #{i+1}. #{post.title}
@@ -25,7 +27,7 @@ class Display
     result
   end
 
- 
+
 
   # def self.child_comments(comment, i=nil)
 
@@ -34,7 +36,7 @@ class Display
   def self.comments_page(top_posts, input)
     result = {}
     post = top_posts[input]
-    comments = Comment.where(parent_id: post[:post_id]).order("score DESC").limit(10)
+    comments = Comment.where(parent_id: post[:post_id]).order("score DESC").limit(4)
 
     entry =  <<-heredoc
 
@@ -61,51 +63,26 @@ class Display
 
   def self.expand_comment(comments, i)
       nested_comment = comments[i]
-      nest_proc = Proc.new { |arg, i|
+      nest_proc = Proc.new { |arg, child_idx|
          <<-heredoc
-              (#{i+1})--------------------------------------------------------------------------------
+              (#{"***"})--------------------------------------------------------------------------------
                User: #{arg.author}      submitted #{Time.now.hour - 1} hours ago
-                 #{arg.body} 
+                 #{arg.body}
             heredoc
-
-
       }
-#      c =  <<-heredoc
-# ---------------------------------------------------------------------------------
 
-
-# ---------------------------------------------------------------------------------
-#       User: #{comments[i]author}      submitted #{Time.now.hour - post.created_at.hour} hours ago
-#         #{comment.body}
-#        heredoc
-      # puts entry 
       comments.values.each_with_index do |comment, idx|
-        # binding.pry
          entry = <<-heredoc
-      (#{i+1})--------------------------------------------------------------------------------
+      (#{idx + 1})--------------------------------------------------------------------------------
        User: #{comment.author}      submitted #{Time.now.hour - 1} hours ago
-         #{comment.body} #{nested_comment.children.each {|com| puts nest_proc.call(com, idx) } if idx + 1 == i}
+         #{comment.body}
           heredoc
           # binding.pry
           puts entry
-        # result[i+1] = comment
+          nested_comment.children.each {|child| puts nest_proc.call(child, idx)} if idx + 1 == i
       end
+  end
 
-
-
-
-  end 
+  # def self.children_comments(comment)
+  # end
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
