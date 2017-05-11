@@ -4,11 +4,17 @@ class Import
     comments_to_database(post_objects)
   end
 
+  #returns subreddit posts as objects
+  def self.subreddit_to_database(comment)
+    subreddit = Subreddit.find_or_create_by(subreddit_id: comment.post[:subreddit_id], title: comment.post[:subreddit_title])
+    posts = posts_to_database(subreddit.title)
+  end
+
   private
 
   #returns posts as Post objects
-  def self.posts_to_database
-    posts = RedditApi.get_hash_of_top_posts
+  def self.posts_to_database(redirect=nil)
+    posts = RedditApi.get_hash_of_top_posts(redirect)
     posts.map do |post|
       if Post.find_by(post_id: post[:post_id]).nil?
         Post.create(post)

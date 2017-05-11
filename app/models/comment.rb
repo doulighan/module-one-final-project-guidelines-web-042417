@@ -26,9 +26,9 @@ class Comment < ActiveRecord::Base
     foreign_key: :parent_id,
     primary_key: :comment_id
 
-  # belongs_to :subreddit,
-  #   through: :parent, 
-  #   source: :subreddit
+  has_one :subreddit,
+    through: :post, 
+    source: :subreddit
 
   def ancestry
     return [] if self.parent.nil?

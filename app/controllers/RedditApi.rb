@@ -2,21 +2,25 @@
 class RedditApi
 
 
- def self.get_hash_of_top_posts
+ def self.get_hash_of_top_posts(redirect=nil)
 
-    api = JSON.parse(RestClient.get("https://api.reddit.com/.json?limit=3"))
+
+    api = JSON.parse(RestClient.get("https://api.reddit.com/#{redirect}/.json?limit=10"))
 
     api["data"]["children"].map do |post|
+    
       {
       post_id: post["data"]["name"],
       title: post["data"]["title"],
       subreddit_id: post["data"]["subreddit_id"],
+      subreddit_title: post["data"]["subreddit"],
       author: post["data"]["author"],
       score: post["data"]["score"].to_i
       }
     end
-
   end
+
+
 
   def self.find_comments_hash(post)
     

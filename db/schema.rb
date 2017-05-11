@@ -28,6 +28,7 @@ ActiveRecord::Schema.define(version: 6) do
 
   create_table "posts", primary_key: "post_id", id: :text, force: :cascade do |t|
     t.string "title"
+    t.string "subreddit_title"
     t.string "author"
     t.integer "score"
     t.datetime "created_at", null: false
@@ -39,7 +40,7 @@ ActiveRecord::Schema.define(version: 6) do
     t.index ["score"], name: "index_posts_on_score"
   end
 
-  create_table "subreddit", id: false, force: :cascade do |t|
+  create_table "subreddits", id: false, force: :cascade do |t|
     t.text "subreddit_id"
     t.text "title"
   end
