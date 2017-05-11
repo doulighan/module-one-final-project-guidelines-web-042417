@@ -27,6 +27,7 @@ class Import
 
 
   def self.comments_to_database(post_objects, num_comments=25)
+  
     comments = post_objects.map { |post| RedditApi.find_comments_hash(post) }
     hashes = []
     comments.each do |comments_page|
