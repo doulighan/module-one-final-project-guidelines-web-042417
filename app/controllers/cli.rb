@@ -4,7 +4,6 @@ class CLI
     #Import.to_database
     
     Display.welcome
-    Import.subreddit_to_database(Comment.last)
 
     while(true)
       posts = Display.top_posts
@@ -17,22 +16,21 @@ class CLI
         break
       end
 
+      comments = Display.comments_page(posts, input)
       while(true)
-        comments = Display.comments_page(posts, input)
         puts " "
         puts "Enter number to expand comment"
         puts "Enter (s) to go to subreddit page"
         puts "Enter (q) to go back to posts"
+      
         input = gets.chomp
-
         if input == "q"
           break
         elsif input == "s"
           Import.subreddit_to_database(comments[1])
+          puts "************* /r/#{comments[1].post.subreddit_title} **************/n"
           Display.top_posts(comments[1].subreddit)
-          
-        elsif
-        comments = Display.expand_comment(comments, input)
+          binding.pry
         end
       end
     end

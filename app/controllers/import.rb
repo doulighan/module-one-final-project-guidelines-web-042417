@@ -7,7 +7,7 @@ class Import
   #returns subreddit posts as objects
   def self.subreddit_to_database(comment)
     subreddit = Subreddit.find_or_create_by(subreddit_id: comment.post[:subreddit_id], title: comment.post[:subreddit_title])
-    posts = posts_to_database(subreddit.title)
+    posts = posts_to_database("r/#{subreddit.title}")
   end
 
   private
@@ -33,6 +33,7 @@ class Import
       hashes << RedditApi.get_hash_of_comments(comments_page).flatten
     end
       comment_objects = hashes.flatten.map do |comment|
+        debugger
         if Comment.find_by(comment_id: comment[:comment_id]).nil? && !comment[:author].nil?
           Comment.create(comment_id: comment[:comment_id], post_id: comment[:post_id], parent_id: comment[:parent_id], body: comment[:body], author: comment[:author], score: comment[:score])
         else

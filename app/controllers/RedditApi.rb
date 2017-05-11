@@ -4,7 +4,6 @@ class RedditApi
 
  def self.get_hash_of_top_posts(redirect=nil)
 
-
     api = JSON.parse(RestClient.get("https://api.reddit.com/#{redirect}/.json?limit=10"))
 
     api["data"]["children"].map do |post|

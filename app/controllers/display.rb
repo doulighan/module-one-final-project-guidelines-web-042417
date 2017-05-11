@@ -11,6 +11,9 @@ class Display
     puts ""
   end
 
+
+
+
   def self.top_posts(origin=Post)
     if origin != Post
       origin = origin.posts
@@ -19,8 +22,7 @@ class Display
     origin.limit(10).each_with_index do |post, i|
      entry =  <<-heredoc
 ---------------------------------------------------------------------------------
-    #{i+1}. (#{post.subreddit_title})
-    #{post.title}
+    #{i+1}. #{post.title}   (#{post.subreddit_title})
     by #{post.author}    submitted #{Time.now.hour - post.created_at.hour} hours ago
       heredoc
       puts entry
@@ -29,27 +31,8 @@ class Display
     result
   end
 
-  def self.top_posts(origin=Post)
-    if origin != Post
-      origin = origin.posts
-    result = {}
-    origin.limit(10).each_with_index do |post, i|
-     entry =  <<-heredoc
----------------------------------------------------------------------------------
-    #{i+1}. #{post.title}
-    by #{post.author}    submitted #{Time.now.hour - post.created_at.hour} hours ago
-      heredoc
-      puts entry
-      result[i+1] = post
-    end
-    result
-  end
 
  
-
-  # def self.child_comments(comment, i=nil)
-
-  # end
 
   def self.comments_page(top_posts, input)
     result = {}
@@ -122,9 +105,9 @@ end
 
 
 
-
-
 end
+
+
 
 
 
