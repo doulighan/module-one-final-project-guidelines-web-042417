@@ -1,12 +1,11 @@
 class CLI
   def self.run
    
-    #Import.to_database
-    
+    Import.to_database
     Display.welcome
+    posts = Display.top_posts
 
     while(true)
-      posts = Display.top_posts
       puts "Enter post number to view comments" 
       puts "(q) to quit"
       

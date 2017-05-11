@@ -33,7 +33,6 @@ class Import
       hashes << RedditApi.get_hash_of_comments(comments_page).flatten
     end
       comment_objects = hashes.flatten.map do |comment|
-        debugger
         if Comment.find_by(comment_id: comment[:comment_id]).nil? && !comment[:author].nil?
           Comment.create(comment_id: comment[:comment_id], post_id: comment[:post_id], parent_id: comment[:parent_id], body: comment[:body], author: comment[:author], score: comment[:score])
         else

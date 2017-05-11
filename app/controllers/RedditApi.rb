@@ -31,7 +31,6 @@ class RedditApi
 
   def self.get_hash_of_comments(hash)
     result = []
-    # debugger
     return result unless hash.is_a?(Hash)
     parameters = Proc.new {|argument|
       {

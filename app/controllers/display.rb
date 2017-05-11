@@ -14,6 +14,9 @@ class Display
 
 
 
+
+
+
   def self.top_posts(origin=Post)
     if origin != Post
       origin = origin.posts
@@ -53,7 +56,7 @@ class Display
     comments.each_with_index do |comment, i|
       entry = <<-heredoc
 (#{i+1})--------------------------------------------------------------------------------
-  User: #{comment.author}      submitted #{Time.now.hour - post.created_at.hour} hours ago
+  User: #{comment.author}  (#{comment.score})      submitted #{Time.now.hour - post.created_at.hour} hours ago
     #{comment.body}
     heredoc
     puts entry
@@ -82,7 +85,6 @@ class Display
          User: #{comment.author}      submitted #{Time.now.hour - 1} hours ago
            #{comment.body}
             heredoc
-            binding.pry
             puts entry
             nested_comment.children[0..4].each {|child| puts nest_proc.call(child, idx)} if idx + 1 == i
         end
