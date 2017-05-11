@@ -27,7 +27,7 @@ class Comment < ActiveRecord::Base
     primary_key: :comment_id
 
   has_one :subreddit,
-    through: :post, 
+    through: :post,
     source: :subreddit
 
   def ancestry
