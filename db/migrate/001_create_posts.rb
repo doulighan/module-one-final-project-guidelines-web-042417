@@ -6,9 +6,7 @@ class CreatePosts < ActiveRecord::Migration[5.1]
       t.string :title
       t.string :author
       t.integer :score
-      t.string :subreddit
       t.timestamps
-
     end
 
   end

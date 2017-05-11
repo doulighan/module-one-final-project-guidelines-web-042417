@@ -16,6 +16,13 @@ class Post < ActiveRecord::Base
   class_name: "Comment",
   foreign_key: :post_id
 
+  # belongs_to :subreddit,
+  #   class_name: "Subreddit",
+  #   foreign_key: :subreddit_id,
+  #   primary_key: :subreddit_id,
+  #   source: :name
+
+
 
 
 

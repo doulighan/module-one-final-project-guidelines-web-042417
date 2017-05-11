@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 4) do
+ActiveRecord::Schema.define(version: 6) do
 
   create_table "comments", primary_key: "comment_id", id: :text, force: :cascade do |t|
     t.string "parent_id"
@@ -30,13 +30,18 @@ ActiveRecord::Schema.define(version: 4) do
     t.string "title"
     t.string "author"
     t.integer "score"
-    t.string "subreddit"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "subreddit_id"
     t.index ["author"], name: "index_posts_on_author"
     t.index ["post_id"], name: "index_posts_on_post_id"
     t.index ["post_id"], name: "sqlite_autoindex_posts_1", unique: true
     t.index ["score"], name: "index_posts_on_score"
+  end
+
+  create_table "subreddit", id: false, force: :cascade do |t|
+    t.text "subreddit_id"
+    t.text "title"
   end
 
 end

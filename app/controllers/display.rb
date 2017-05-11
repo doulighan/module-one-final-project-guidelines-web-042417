@@ -27,7 +27,9 @@ class Display
 
  
 
+  # def self.child_comments(comment, i=nil)
 
+  # end
 
   def self.comments_page(top_posts, input)
     result = {}
@@ -59,6 +61,15 @@ class Display
 
   def self.expand_comment(comments, i)
       nested_comment = comments[i]
+      nest_proc = Proc.new { |arg, i|
+         <<-heredoc
+              (#{i+1})--------------------------------------------------------------------------------
+               User: #{arg.author}      submitted #{Time.now.hour - 1} hours ago
+                 #{arg.body} 
+            heredoc
+
+
+      }
 #      c =  <<-heredoc
 # ---------------------------------------------------------------------------------
 
@@ -68,15 +79,16 @@ class Display
 #         #{comment.body}
 #        heredoc
       # puts entry 
-      comments.each_with_index do |comment, idx|
+      comments.values.each_with_index do |comment, idx|
+        # binding.pry
          entry = <<-heredoc
       (#{i+1})--------------------------------------------------------------------------------
-       User: #{comment.author}      submitted #{Time.now.hour - post.created_at.hour} hours ago
-         #{comment.body} #{nested_comment.descendants.each {|com| puts com.body } if idx + 1 == i}
+       User: #{comment.author}      submitted #{Time.now.hour - 1} hours ago
+         #{comment.body} #{nested_comment.children.each {|com| puts nest_proc.call(com, idx) } if idx + 1 == i}
           heredoc
-          binding.pry
+          # binding.pry
           puts entry
-        result[i+1] = comment
+        # result[i+1] = comment
       end
 
 

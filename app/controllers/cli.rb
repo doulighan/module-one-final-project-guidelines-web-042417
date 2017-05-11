@@ -1,6 +1,6 @@
 class CLI
   def self.run
-    #Import.to_database
+    Import.to_database
     posts = Display.top_posts(20)
     
     Display.welcome
