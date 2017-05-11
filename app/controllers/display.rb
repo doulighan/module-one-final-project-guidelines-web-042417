@@ -14,6 +14,7 @@ class Display
   def self.top_posts(origin=Post)
     if origin != Post
       origin = origin.posts
+    end
     result = {}
     origin.limit(5).each_with_index do |post, i|
      entry =  <<-heredoc
@@ -82,7 +83,7 @@ class Display
           nested_comment.children.each {|child| puts nest_proc.call(child, idx)} if idx + 1 == i
       end
   end
+end
 
   # def self.children_comments(comment)
   # end
-end
