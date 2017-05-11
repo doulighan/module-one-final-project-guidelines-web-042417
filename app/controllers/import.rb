@@ -1,7 +1,6 @@
 class Import
   def self.to_database
     post_objects = posts_to_database
-    comments_to_database(post_objects)
   end
 
   #returns subreddit posts as objects
@@ -15,13 +14,14 @@ class Import
   #returns posts as Post objects
   def self.posts_to_database(redirect=nil)
     posts = RedditApi.get_hash_of_top_posts(redirect)
-    posts.map do |post|
+    posts.map! do |post|
       if Post.find_by(post_id: post[:post_id]).nil?
         Post.create(post)
       else
         Post.find_by(post_id: post[:post_id])
       end
     end
+      comments_to_database(posts)
   end
 
 

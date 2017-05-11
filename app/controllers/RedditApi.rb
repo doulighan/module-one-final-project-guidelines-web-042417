@@ -4,7 +4,7 @@ class RedditApi
 
   def self.get_hash_of_top_posts(redirect=nil)
     api = JSON.parse(RestClient.get("https://api.reddit.com/#{redirect}/.json?limit=10"))
-    api["data"]["children"].map {|post| post_hash_to_object(post )}
+    api["data"]["children"].map {|post| post_hash_to_object(post)}
   end
 
 
@@ -26,12 +26,12 @@ class RedditApi
 
   def self.post_hash_to_object(hash)
     {
-      post_id: post["data"]["name"],
-      title: post["data"]["title"],
-      subreddit_id: post["data"]["subreddit_id"],
-      subreddit_title: post["data"]["subreddit"],
-      author: post["data"]["author"],
-      score: post["data"]["score"].to_i
+      post_id: hash["data"]["name"],
+      title: hash["data"]["title"],
+      subreddit_id: hash["data"]["subreddit_id"],
+      subreddit_title: hash["data"]["subreddit"],
+      author: hash["data"]["author"],
+      score: hash["data"]["score"].to_i
     }
   end
 

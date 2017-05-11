@@ -1,11 +1,11 @@
 class CLI
   def self.run
-   
-    #Import.to_database
+
+    Import.to_database
     Display.welcome
     posts = Display.top_posts
 
-    
+
 
 
 
@@ -14,13 +14,13 @@ class CLI
       puts " "
       puts "************* CURRENTLY VIEWING: FRONT PAGE *************"
       puts " "
-      puts "Enter post number (1-10) to view its comments" 
+      puts "Enter post number (1-10) to view its comments"
       puts "Enter (q) to quit "
       puts " "
-      
+
       input = gets.chomp.to_i
       exit if input == "q"
-      
+
       comments = Display.comments_page(posts, input)
       post = comments[1].post
       while(true)
@@ -42,7 +42,7 @@ class CLI
 
         elsif input.to_i <= 10
           Display.expand_comment(comments, input)
-        
+
         elsif input == "q"
           exit
         else

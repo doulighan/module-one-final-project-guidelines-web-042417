@@ -53,9 +53,9 @@ class Display
       end
     end
   end
-  
-  def self.thread_header(post=nil)
-    page_title = post.class == Post ? post.subreddit.title  : "FRONTPAGE"
+
+  def self.thread_header(posts)
+    page_title = posts.is_a?(Array) ? posts.first.subreddit.title  : "FRONTPAGE"
     <<-heredoc
     ___________________________________________________________________________
     #{page_title}
