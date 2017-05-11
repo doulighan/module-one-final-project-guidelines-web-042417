@@ -62,49 +62,33 @@ class Display
     result
   end
 
-#   def self.expand_comment(comments, i)
-#       nested_comment = comments[i]
-#       nest_proc = Proc.new { |arg, i|
-#          <<-heredoc
-#               (#{i+1})--------------------------------------------------------------------------------
-#                User: #{arg.author}      submitted #{Time.now.hour - 1} hours ago
-#                  #{arg.body} 
-#             heredoc
 
 
-#       }
-# #      c =  <<-heredoc
-# # ---------------------------------------------------------------------------------
+  def self.expand_comment(comments, n)
+        i = n.to_i
+        nested_comment = comments[i]
+        nest_proc = Proc.new { |arg, child_idx|
+           <<-heredoc
+                (#{"***"})--------------------------------------------------------------------------------
+                 User: #{arg.author}      submitted #{Time.now.hour - 1} hours ago
+                   #{arg.body}
+                   
+              heredoc
+        }
 
+       comments.values.each_with_index do |comment, idx|
+           entry = <<-heredoc
+        (#{idx + 1})--------------------------------------------------------------------------------
+         User: #{comment.author}      submitted #{Time.now.hour - 1} hours ago
+           #{comment.body}
+            heredoc
+            binding.pry
+            puts entry
+            nested_comment.children[0..4].each {|child| puts nest_proc.call(child, idx)} if idx + 1 == i
+        end
+    end
 
-# # ---------------------------------------------------------------------------------
-# #       User: #{comments[i]author}      submitted #{Time.now.hour - post.created_at.hour} hours ago
-# #         #{comment.body}
-# #        heredoc
-#       # puts entry 
-#       comments.values.each_with_index do |comment, idx|
-#         # binding.pry
-#          entry = <<-heredoc
-#       (#{i+1})--------------------------------------------------------------------------------
-#        User: #{comment.author}      submitted #{Time.now.hour - 1} hours ago
-#          #{comment.body} #{nested_comment.children.each {|com| puts nest_proc.call(com, idx) } if idx + 1 == i}
-#           heredoc
-#           # binding.pry
-#           puts entry
-#         # result[i+1] = comment
-#       end
-
-
-
-def self.subreddit(subreddit_title)
-  posts = Import.subreddit_to_database(subreddit_title)
-  binding.pry
-end
-
-
-
-
-
+ 
 end
 
 

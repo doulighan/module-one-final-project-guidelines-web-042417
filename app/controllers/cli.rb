@@ -19,18 +19,19 @@ class CLI
       comments = Display.comments_page(posts, input)
       while(true)
         puts " "
-        puts "Enter number to expand comment"
-        puts "Enter (s) to go to subreddit page"
-        puts "Enter (q) to go back to posts"
-      
+        puts "Enter number (1-10) to view comment replies"
+        puts "Enter (s) to go to this subreddit page"
+
         input = gets.chomp
-        if input == "q"
-          break
-        elsif input == "s"
+
+        if input == "s"
           Import.subreddit_to_database(comments[1])
           puts "************* /r/#{comments[1].post.subreddit_title} **************/n"
           Display.top_posts(comments[1].subreddit)
-          binding.pry
+        elsif input.to_i <= 10
+          Display.expand_comment(comments, input)
+        elsif input == "q"
+          #quit
         end
       end
     end
