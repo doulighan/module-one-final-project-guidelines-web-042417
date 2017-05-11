@@ -68,27 +68,32 @@ class Display
 
 
   def self.expand_comment(comments, n)
-        i = n.to_i
-        nested_comment = comments[i]
-        nest_proc = Proc.new { |arg, child_idx|
-           <<-heredoc
-                (#{"***"})--------------------------------------------------------------------------------
-                 User: #{arg.author}      submitted #{Time.now.hour - 1} hours ago
-                   #{arg.body}
-                   
-              heredoc
-        }
-
-       comments.values.each_with_index do |comment, idx|
-           entry = <<-heredoc
-        (#{idx + 1})--------------------------------------------------------------------------------
-         User: #{comment.author}      submitted #{Time.now.hour - 1} hours ago
-           #{comment.body}
+      i = n.to_i
+      nested_comment = comments[i]
+      nest_proc = Proc.new { |arg, child_idx|
+         <<-heredoc
+              (#{"***"})--------------------------------------------------------------------------------
+               User: #{arg.author}      submitted #{Time.now.hour - 1} hours ago
+                 #{arg.body}
+                 
             heredoc
-            puts entry
-            nested_comment.children[0..4].each {|child| puts nest_proc.call(child, idx)} if idx + 1 == i
+      }
+
+     comments.values.each_with_index do |comment, idx|
+         entry = <<-heredoc
+      (#{idx + 1})--------------------------------------------------------------------------------
+       User: #{comment.author}      submitted #{Time.now.hour - 1} hours ago
+         #{comment.body}
+          heredoc
+          puts entry
+          if idx + 1 == i
+            nested_comment.children[0..4].each do |child|
+             puts nest_proc.call(child, idx)
+          end
+          break
         end
-    end
+      end
+  end
 
  
 end
