@@ -77,23 +77,4 @@ class Import
     end
   end
 
-
-
-  def self.comments_to_database(post_objects, num_comments=25)
-
-    comments = post_objects.map { |post| RedditApi.find_comments_hash(post) }
-    hashes = []
-    comments.each do |comments_page|
-      hashes << RedditApi.get_hash_of_comments(comments_page).flatten
-    end
-      comment_objects = hashes.flatten.map do |comment|
-        if comment.nil? || Comment.find_by(comment_id: comment[:comment_id]).nil?
-          Comment.create(comment_id: comment[:comment_id], post_id: comment[:post_id], parent_id: comment[:parent_id], body: comment[:body], author: comment[:author], score: comment[:score])
-
-        else
-          Comment.find_by(comment_id: comment[:comment_id])
-        end
-      end
-    comment_objects
-  end
 end
