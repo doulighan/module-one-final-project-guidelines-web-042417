@@ -1,8 +1,6 @@
 
 class Display
-
-
-
+  ##must be called independtly
   def self.welcome
     puts ""
     puts ""
@@ -10,6 +8,8 @@ class Display
     puts ""
     puts ""
   end
+
+  ### gives nothing or a subreddit obj
   def self.top_posts(origin=Post)
     result = {}
     origin != Post ? origin = origin.posts : nil
@@ -55,10 +55,10 @@ class Display
   end
 
   def self.thread_header(posts)
-    page_title = posts.is_a?(Array) ? posts.first.subreddit.title  : "FRONTPAGE"
+    page_title = posts.is_a?(Array) ? posts.first.subreddit.title.upcase  : "FRONTPAGE"
     <<-heredoc
     ___________________________________________________________________________
-    #{page_title}
+    *****CURRENTLY VIEWING***** :#{page_title}
     _________________________________________________________________________
     heredoc
   end

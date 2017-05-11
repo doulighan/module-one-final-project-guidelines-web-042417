@@ -11,17 +11,15 @@ class CLI
 
 
     while(true)
-      puts " "
-      puts "************* CURRENTLY VIEWING: FRONT PAGE *************"
-      puts " "
-      puts "Enter post number (1-10) to view its comments"
-      puts "Enter (q) to quit "
-      puts " "
+  
 
       input = gets.chomp.to_i
+
+      ###got error...if you dont type 1-10, turns to zero, then comments below dont work because posts[0] does not exist
       exit if input == "q"
 
       comments = Display.comments_page(posts, input)
+      binding.pry
       post = comments[1].post
       while(true)
         puts " "
