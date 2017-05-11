@@ -21,7 +21,6 @@ class Import
 
 
   def self.comments_to_database(post_objects, num_comments=25)
-
     comments = post_objects.map { |post| RedditApi.find_comments_hash(post) }
     hashes = []
     comments.each do |comments_page|
@@ -30,7 +29,6 @@ class Import
       comment_objects = hashes.flatten.map do |comment|
         if Comment.find_by(comment_id: comment[:comment_id]).nil? && !comment[:author].nil?
           Comment.create(comment_id: comment[:comment_id], post_id: comment[:post_id], parent_id: comment[:parent_id], body: comment[:body], author: comment[:author], score: comment[:score])
-
         else
           Comment.find_by(comment_id: comment[:comment_id])
         end

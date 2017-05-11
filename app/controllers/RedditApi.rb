@@ -1,8 +1,9 @@
 
 class RedditApi
 
+
  def self.get_hash_of_top_posts
-    api = JSON.parse(RestClient.get("https://api.reddit.com/"))
+    api = JSON.parse(RestClient.get("https://api.reddit.com/.json?limit=3"))
     api["data"]["children"].map do |post|
       {
       post_id: post["data"]["name"],
@@ -39,42 +40,4 @@ class RedditApi
     end
     result
   end
-  # def self.get_hash_of_comments(post)
-  #
-  #   api = JSON.parse(RestClient.get("https://api.reddit.com/r/#{post.subreddit}/comments/#{post.post_id[3..-1]}?sort=old.json")).last
-  #   binding.pry
-  #   api["data"]["children"].map do |comment|
-  #     {
-  #       comment_id: comment["data"]["name"],
-  #       parent_id: comment["data"]["parent_id"],
-  #       post_id: comment["data"]["link_id"],
-  #       body: comment["data"]["body"],
-  #       author: comment["data"]["author"],
-  #       score: comment["data"]["score"].to_i
-  #     }
-  #   end
-  # end
-
-end
-
-class Import
-  def self.to_database
-    post_objects = posts_to_database
-    comments_to_database(post_objects)
-  end
-
-  private
-
-  #returns posts as Post objects
-  def self.posts_to_database
-    posts = RedditApi.get_hash_of_top_posts
-    posts.map do |post|
-      if Post.find_by(post_id: post[:post_id]).nil?
-        Post.create(post)
-      else
-        Post.find_by(post_id: post[:post_id])
-      end
-    end
-  end
-
 end
