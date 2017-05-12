@@ -8,6 +8,7 @@ class RedditApi
   end
 
 
+
   def self.find_comments_hash(post)
      JSON.parse(RestClient.get("https://api.reddit.com/comments/#{post.post_id[3..-1]}")).last
   end

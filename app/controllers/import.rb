@@ -5,9 +5,20 @@ class Import
 
   #returns subreddit posts as objects
   def self.subreddit_to_database(comment)
-    subreddit = Subreddit.find_or_create_by(subreddit_id: comment.post[:subreddit_id], title: comment.post[:subreddit_title])
-    posts = ("r/#{subreddit.title}") ##gets comments as well
-    Display.top_posts(subreddit) ## takes us to subreddit page
+    if comment.nil?
+      puts "  Subreddit not found!\n".red
+    else
+      subreddit = Subreddit.find_or_create_by(subreddit_id: comment.post[:subreddit_id], title: comment.post[:subreddit_title])
+      posts = ("r/#{subreddit.title}") ##gets comments as well
+      Display.top_posts(subreddit) ## takes us to subreddit page
+    end
+    subreddit
+  end
+
+  def self.search_subreddit_to_database(string)
+    sub = "r/#{string}".downcase
+    comments = posts_to_database(sub)
+    subreddit_to_database(comments[1])
   end
 
   private

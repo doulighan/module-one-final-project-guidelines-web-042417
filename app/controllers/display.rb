@@ -70,19 +70,27 @@ class Display
     page_title = posts.is_a?(Array) ? posts.first.subreddit.title.upcase  : "FRONTPAGE"
     <<-heredoc
 ________________________________________________________________________________
-    ***** CURRENTLY VIEWING: #{page_title} *****
+                      CURRENTLY VIEWING: #{page_title} 
 ________________________________________________________________________________
     heredoc
   end
 
   def self.subreddit_header(posts)
+    if posts.is_a?(Subreddit)
+      <<-heredoc
+________________________________________________________________________________
+                      CURRENTLY VIEWING: #{posts.title} 
+________________________________________________________________________________
+    heredoc
+  else
     page_title = posts.first[1].subreddit.title.upcase
     <<-heredoc
 ________________________________________________________________________________
-    ***** CURRENTLY VIEWING: #{page_title} *****
+                      CURRENTLY VIEWING: #{page_title} 
 ________________________________________________________________________________
     heredoc
   end
+end
 
 
   def self.print_post(post, i)
@@ -96,15 +104,14 @@ ________________________________________________________________________________
 
   def self.print_title_post(post)
     title_post =  <<-heredoc
-    #{post.title}      (#{post.subreddit_title})
-    by #{post.author}  (score:#{post.score})  submitted #{Time.now.hour - post.created_at.hour} hours ago
-    ---------------------------------------------------------------------------------
-    Comments:
+#{post.title}      (#{post.subreddit_title})
+by #{post.author}  (score:#{post.score})  submitted #{Time.now.hour - post.created_at.hour} hours ago
+________________________________________________________________________________
+Comments:
 
     heredoc
-    puts "---------------------------------------------------------------------------------".white
-    puts title_post
-    puts "---------------------------------------------------------------------------------".white
+    puts "________________________________________________________________________________".white
+    puts title_post.white
 
   end
 
