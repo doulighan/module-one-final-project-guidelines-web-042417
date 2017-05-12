@@ -1,12 +1,13 @@
 class Import
-  def self.to_database
-    post_objects = posts_to_database
+  def self.to_database(redirect=nil)
+    post_objects = posts_to_database(redirect)
   end
 
   #returns subreddit posts as objects
   def self.subreddit_to_database(comment)
     subreddit = Subreddit.find_or_create_by(subreddit_id: comment.post[:subreddit_id], title: comment.post[:subreddit_title])
-    posts = posts_to_database("r/#{subreddit.title}")
+    posts = posts_to_database("r/#{subreddit.title}") ##gets comments as well
+    Display.top_posts(subreddit) ## takes us to subreddit page
   end
 
   private

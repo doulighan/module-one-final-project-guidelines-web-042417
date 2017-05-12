@@ -12,6 +12,7 @@ class Display
   ### gives nothing or a subreddit obj
   def self.top_posts(origin=Post)
     result = {}
+
     origin != Post ? origin = origin.posts : nil
     thread_header(origin)
     origin.limit(10).each_with_index do |post, i|
@@ -19,14 +20,14 @@ class Display
       result[i+1] = post
     end
 
-    result
+     result ##posts with integer
   end
 
 
   def self.comments_page(top_posts, input)
+
     post = top_posts[input]
     comments = Comment.where(parent_id: post[:post_id]).order("score DESC").limit(10)
-
     print_title_post(post)
     comment_printer(comments)
   end

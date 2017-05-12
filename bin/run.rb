@@ -1,8 +1,4 @@
 require_relative '../config/environment'
 require 'snoo'
-
-CLI.run
-
-
-
-
+session = CLI.new
+session.run
