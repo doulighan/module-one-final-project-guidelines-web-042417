@@ -70,7 +70,7 @@ class Display
     page_title = posts.is_a?(Array) ? posts.first.subreddit.title.upcase  : "FRONTPAGE"
     <<-heredoc
 ________________________________________________________________________________
-    ***** CURRENTLY VIEWING: #{page_title} ***** 
+    ***** CURRENTLY VIEWING: #{page_title} *****
 ________________________________________________________________________________
     heredoc
   end
@@ -79,7 +79,7 @@ ________________________________________________________________________________
     page_title = posts.first[1].subreddit.title.upcase
     <<-heredoc
 ________________________________________________________________________________
-    ***** CURRENTLY VIEWING: #{page_title} ***** 
+    ***** CURRENTLY VIEWING: #{page_title} *****
 ________________________________________________________________________________
     heredoc
   end
@@ -87,7 +87,7 @@ ________________________________________________________________________________
 
   def self.print_post(post, i)
     result = <<-heredoc
-    #{i+1}. #{post.title}   (#{post.subreddit_title})     
+    #{i+1}. #{post.title}   (#{post.subreddit_title})
     by #{post.author}     (score:#{post.score})      submitted #{Time.now.hour - post.created_at.hour} hours ago
     heredoc
     puts "---------------------------------------------------------------------------------".white
@@ -96,7 +96,7 @@ ________________________________________________________________________________
 
   def self.print_title_post(post)
     title_post =  <<-heredoc
-    #{post.title}      (#{post.subreddit_title})     
+    #{post.title}      (#{post.subreddit_title})
     by #{post.author}  (score:#{post.score})  submitted #{Time.now.hour - post.created_at.hour} hours ago
     ---------------------------------------------------------------------------------
     Comments:

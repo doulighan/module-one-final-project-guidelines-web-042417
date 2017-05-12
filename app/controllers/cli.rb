@@ -1,15 +1,17 @@
 class CLI
 
-  attr_accessor :posts, :comments, :current_page, :prev_posts, :prev_comments, :pages, :depth
+  attr_accessor :posts, :comments, :current_page, :prev_posts, :prev_comments, :pages, :input, :prev_input
     def initialize
       @current_page = Post
       @last_page = Post
       @comments = nil
       @in_comments = false
       @posts = nil
-      @pages = []
-      @prev_posts = []
-      @prev_comments = []
+      @prev_input = nil
+      @input = nil
+      # @pages = []
+      # @prev_posts = []
+      # @prev_comments = []
     end
 
     def run
@@ -32,8 +34,12 @@ class CLI
 
       if @input.to_i >=1
         @input = @input.to_i
-        if @in_comments
+        if @in_comments && @input == @prev_input
+          Display.expand_comment_plus_one(@comments, @input)
+          @prev_input = @input
+        elsif @in_comments
           Display.expand_comment(@comments, @input)
+          @prev_input = @input
           puts "+++++++++++++++++++++++++++++++++++++++++++++++".white
           puts "Enter (s) to go to this subreddit".white
           puts "Enter (b) to go back".white
