@@ -25,7 +25,6 @@ class Display
 
 
   def self.comments_page(top_posts, input)
-
     post = top_posts[input]
     comments = Comment.where(parent_id: post[:post_id]).order("score DESC").limit(10)
     print_title_post(post)
@@ -55,21 +54,33 @@ class Display
     end
   end
 
+  # def self.print_comment(comment, i=nil)
+  #   i.nil? ? maybe_counter = "***" : maybe_counter = Proc.new {|arg| arg += 1 }
+  #   comment = <<-heredoc
+  #   #{maybe_counter.is_a?(String) ? 'reply: (' + maybe_counter : '(' + maybe_counter.call(i).to_s})--------------------------------------------------------------------------------
+  #   User: #{comment.author}  (#{comment.score})      submitted #{Time.now.hour -  1} hours ago
+  #   #{comment.body}
+  #   heredoc
+
+  #  puts comment
+  # end
+
+
   def self.thread_header(posts)
     page_title = posts.is_a?(Array) ? posts.first.subreddit.title.upcase  : "FRONTPAGE"
     <<-heredoc
-    ___________________________________________________________________________
+________________________________________________________________________________
     ***** CURRENTLY VIEWING: #{page_title} ***** 
-    ___________________________________________________________________________
+________________________________________________________________________________
     heredoc
   end
 
   def self.subreddit_header(posts)
     page_title = posts.first[1].subreddit.title.upcase
     <<-heredoc
-    ___________________________________________________________________________
+________________________________________________________________________________
     ***** CURRENTLY VIEWING: #{page_title} ***** 
-    ___________________________________________________________________________
+________________________________________________________________________________
     heredoc
   end
 
@@ -96,6 +107,64 @@ class Display
     puts "---------------------------------------------------------------------------------".white
 
   end
+
+  def self.expand_comment_plus_one(comments, i)
+    result = {}
+    nested_comment = comments[i]
+
+   comments.values.each_with_index do |comment, idx|
+      if idx + 1 < i
+        print_comment(comment, idx)
+      end
+      result[idx + 1] = comment
+      if idx + 1 == i
+        nested_comment.children[0..3].each do |child|
+          print_comment(child)
+          child.children[0..3].each do |grandchild|
+           puts <<-grandchild
+                      child_reply:(#{"*****"})------------------------------------------------------------------------------
+                      User: #{grandchild.author}  (#{grandchild.score})      submitted #{Time.now.hour -  1} hours ago
+                      #{grandchild.body}
+           grandchild
+          end
+        end
+
+     end
+    end
+
+   result
+  end
+#   def self.expand_comment(comments, i)
+#     result = {}
+#     nested_comment = comments[i]
+
+#    comments.values.each_with_index do |comment, idx|
+#       print_comment(comment)
+#       if idx + 1 == i
+#         nested_comment.children[0..3].each do |child|
+#           print_comment(child)
+#         end
+#       end
+#       result[idx + 1] = comment
+#     end
+
+#    result
+#   end
+
+# if @input.to_i >=1
+#         @input = @input.to_i
+#         if @in_comments[0] && (@in_comments[1] == @input)
+#           @comments = Display.expand_comment_plus_one(@comments, @input)
+#           @in_comments[1] = nil
+#         elsif @in_comments[0]
+#           @comments = Display.expand_comment(@comments, @input)
+#           @in_comments[1] = @input
+#         else
+#           @in_comments[0] = true
+#           @comments = Display.comments_page(@posts.pop, @input)
+#           @last_page << @current_page
+#           @current_page = @comments[1].subreddit
+#         end
 
   def self.print_comment(comment, i=nil)
     i.nil? ? maybe_counter = "***" : maybe_counter = Proc.new {|arg| arg += 1 }

@@ -21,10 +21,10 @@ class CLI
     end
 
     def get_input
-      puts "* * * * * * * * * * * * * * * * * * * * * * *".white
+      puts "+++++++++++++++++++++++++++++++++++++++++++++++".white
       puts "\nWhat would you like to do?\n".red
       @input = gets.chomp.downcase
-      puts "\n* * * * * * * * * * * * * * * * * * * * * * *".white
+      puts "+++++++++++++++++++++++++++++++++++++++++++++++".white
       parse_input
     end
 
@@ -34,7 +34,7 @@ class CLI
         @input = @input.to_i
         if @in_comments
           Display.expand_comment(@comments, @input)
-          puts "\n* * * * * * * * * * * * * * * * * * * * * * *".white
+          puts "+++++++++++++++++++++++++++++++++++++++++++++++".white
           puts "Enter (s) to go to this subreddit".white
           puts "Enter (b) to go back".white
           puts "Enter (h) to go to the frontpage".white
@@ -42,7 +42,7 @@ class CLI
         else
           @in_comments = true
           @comments = Display.comments_page(@posts, @input)
-          puts "\n* * * * * * * * * * * * * * * * * * * * * * *".white
+          puts "+++++++++++++++++++++++++++++++++++++++++++++++".white
           puts "Enter (1-10) to expand comment".white
           puts "Enter (s) to go to this subreddit".white
           puts "Enter (b) to go back".white
@@ -52,6 +52,7 @@ class CLI
       else
 
         case @input
+
         when 'b'
           back
           @in_comments = false
@@ -74,7 +75,6 @@ class CLI
     end
 
 
-
     def return_home
       display_page(Post)
       @last_page = Post
@@ -83,7 +83,7 @@ class CLI
     def display_page(current_page=@current_page)
       posts = Display.top_posts(current_page)
       puts Display.thread_header(posts).white
-      puts "\n* * * * * * * * * * * * * * * * * * * * * * *\n".white
+      puts "+++++++++++++++++++++++++++++++++++++++++++++++".white
       puts "Enter (1-10) to view post".white
       puts "Enter (h) to go to the frontpage".white
       puts "Enter (q) to quit".white
@@ -93,7 +93,7 @@ class CLI
     def go_to_subreddit
       @posts = Import.subreddit_to_database(@comments[1])
       puts Display.subreddit_header(@posts).white
-      puts "\n* * * * * * * * * * * * * * * * * * * * * * *\n".white
+      puts "+++++++++++++++++++++++++++++++++++++++++++++++".white
       puts "Enter (1-10) to view post".white
       puts "Enter (h) to go to the frontpage".white
       puts "Enter (q) to quit".white
@@ -102,7 +102,7 @@ class CLI
 
     def back
       Display.top_posts(@last_page)
-      puts "\n* * * * * * * * * * * * * * * * * * * * * * *\n".white
+      puts "+++++++++++++++++++++++++++++++++++++++++++++++".white
       puts "Enter (1-10) to view post".white
       puts "Enter (h) to go to the frontpage".white
       puts "Enter (q) to quit".white
