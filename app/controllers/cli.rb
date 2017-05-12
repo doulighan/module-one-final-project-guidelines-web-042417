@@ -13,30 +13,41 @@ class CLI
     end
 
     def run
-      #
-      # Import.to_database
+      puts "Loading...".white
+      Import.to_database
       Display.welcome
       display_page
-
-      ###@posts = front page posts
       get_input
-
     end
 
     def get_input
-      puts "What would you like to do?"
+      puts "* * * * * * * * * * * * * * * * * * * * * * *".white
+      puts "\nWhat would you like to do?\n".red
       @input = gets.chomp.downcase
+      puts "\n* * * * * * * * * * * * * * * * * * * * * * *".white
       parse_input
     end
 
     def parse_input
+
       if @input.to_i >=1
         @input = @input.to_i
         if @in_comments
           Display.expand_comment(@comments, @input)
+          puts "\n* * * * * * * * * * * * * * * * * * * * * * *".white
+          puts "Enter (s) to go to this subreddit".white
+          puts "Enter (b) to go back".white
+          puts "Enter (h) to go to the frontpage".white
+          puts "Enter (q) to quit".white
         else
           @in_comments = true
           @comments = Display.comments_page(@posts, @input)
+          puts "\n* * * * * * * * * * * * * * * * * * * * * * *".white
+          puts "Enter (1-10) to expand comment".white
+          puts "Enter (s) to go to this subreddit".white
+          puts "Enter (b) to go back".white
+          puts "Enter (h) to go to the frontpage".white
+          puts "Enter (q) to quit".white
         end
       else
 
@@ -45,16 +56,18 @@ class CLI
           back
           @in_comments = false
         when 's'
+          puts "\n Loading Subreddit ... \n".red
           go_to_subreddit
           @in_comments = false
         when 'h'
           return_home
           @in_comments = false
         when 'q'
+          puts "\n\n  Goodbye! \n\n".red
           exit
         else
           @in_comments = false
-          puts "That is not a valid input. Please try again"
+          puts "That is not a valid input. Please try again".red
         end
       end
       get_input
@@ -69,64 +82,34 @@ class CLI
 
     def display_page(current_page=@current_page)
       posts = Display.top_posts(current_page)
+      puts Display.thread_header(posts).white
+      puts "\n* * * * * * * * * * * * * * * * * * * * * * *\n".white
+      puts "Enter (1-10) to view post".white
+      puts "Enter (h) to go to the frontpage".white
+      puts "Enter (q) to quit".white
       @posts = posts
     end
-    ### 1 => redirect to post 1
-    ###in page
+
     def go_to_subreddit
       @posts = Import.subreddit_to_database(@comments[1])
+      puts Display.subreddit_header(@posts).white
+      puts "\n* * * * * * * * * * * * * * * * * * * * * * *\n".white
+      puts "Enter (1-10) to view post".white
+      puts "Enter (h) to go to the frontpage".white
+      puts "Enter (q) to quit".white
       @last_page = @comments[1].subreddit
     end
 
     def back
       Display.top_posts(@last_page)
+      puts "\n* * * * * * * * * * * * * * * * * * * * * * *\n".white
+      puts "Enter (1-10) to view post".white
+      puts "Enter (h) to go to the frontpage".white
+      puts "Enter (q) to quit".white
       @current_page = @last_page
     end
 
 
 
 
-  #   while(true)
-  #
-  #
-  #     input = gets.chomp.to_i
-  #
-  #     ###got error...if you dont type 1-10, turns to zero, then comments below dont work because posts[0] does not exist
-  #     exit if input == "q"
-  #
-  #     comments = Display.comments_page(posts, input)
-  #     binding.pry
-  #     post = comments[1].post
-  #     while(true)
-  #       puts " "
-  #       puts "************* CURRENTLY VIEWING: #{post.title.upcase} **************"
-  #       puts "  "
-  #       puts "Enter number (1-10) to view comment replies"
-  #       puts "Enter (s) to go to this subreddit page"
-  #       puts "Enter (b) to go back"
-  #       puts "Enter (q) to quit "
-  #       puts " "
-  #
-  #       input = gets.chomp
-  #
-  #       if input == "s"
-  #         Import.subreddit_to_database(comments[1])
-  #         puts "************* /r/#{comments[1].post.subreddit_title} **************\n"
-  #         Display.top_posts(comments[1].subreddit)
-  #
-  #       elsif input.to_i <= 10
-  #         Display.expand_comment(comments, input)
-  #
-  #       elsif input == "q"
-  #         exit
-  #       else
-  #         puts " "
-  #         puts " INVALID COMMAND "
-  #         puts " "
-  #       end
-  #     end
-  #   end
-  #
-  #
-  # end
 end

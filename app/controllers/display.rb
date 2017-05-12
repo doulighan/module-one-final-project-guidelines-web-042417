@@ -59,39 +59,49 @@ class Display
     page_title = posts.is_a?(Array) ? posts.first.subreddit.title.upcase  : "FRONTPAGE"
     <<-heredoc
     ___________________________________________________________________________
-    *****CURRENTLY VIEWING***** :#{page_title}
-    _________________________________________________________________________
+    ***** CURRENTLY VIEWING: #{page_title} ***** 
+    ___________________________________________________________________________
+    heredoc
+  end
+
+  def self.subreddit_header(posts)
+    page_title = posts.first[1].subreddit.title.upcase
+    <<-heredoc
+    ___________________________________________________________________________
+    ***** CURRENTLY VIEWING: #{page_title} ***** 
+    ___________________________________________________________________________
     heredoc
   end
 
 
   def self.print_post(post, i)
     result = <<-heredoc
-    ---------------------------------------------------------------------------------
-    #{i+1}. #{post.title}   (#{post.subreddit_title})
-    by #{post.author}    submitted #{Time.now.hour - post.created_at.hour} hours ago
+    #{i+1}. #{post.title}   (#{post.subreddit_title})     
+    by #{post.author}     (score:#{post.score})      submitted #{Time.now.hour - post.created_at.hour} hours ago
     heredoc
+    puts "---------------------------------------------------------------------------------".white
     puts result
   end
 
   def self.print_title_post(post)
     title_post =  <<-heredoc
-    ---------------------------------------------------------------------------------
-    #{post.title}
-    by #{post.author}    submitted #{Time.now.hour - post.created_at.hour} hours ago
+    #{post.title}      (#{post.subreddit_title})     
+    by #{post.author}  (score:#{post.score})  submitted #{Time.now.hour - post.created_at.hour} hours ago
     ---------------------------------------------------------------------------------
     Comments:
 
     heredoc
-
+    puts "---------------------------------------------------------------------------------".white
     puts title_post
+    puts "---------------------------------------------------------------------------------".white
+
   end
 
   def self.print_comment(comment, i=nil)
     i.nil? ? maybe_counter = "***" : maybe_counter = Proc.new {|arg| arg += 1 }
     comment = <<-heredoc
     (#{maybe_counter.is_a?(String) ? maybe_counter : maybe_counter.call(i)})--------------------------------------------------------------------------------
-    User: #{comment.author}  (#{comment.score})      submitted #{Time.now.hour -  1} hours ago
+    User: #{comment.author}  (score:#{comment.score})      submitted #{Time.now.hour -  1} hours ago
     #{comment.body}
     heredoc
 
