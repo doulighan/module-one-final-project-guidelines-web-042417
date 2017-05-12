@@ -25,21 +25,25 @@ class Display
 
 
   def self.comments_page(top_posts, input)
+    result = {}
     post = top_posts[input]
     comments = Comment.where(parent_id: post[:post_id]).order("score DESC").limit(10)
-    print_title_post(post)
-    comment_printer(comments)
+    comments.each_with_index do |comment, i|
+      comment_generator(comment, i + 1)
+      result[i + 1] = comment
+    end
+    result
   end
 
-  def self.comment_printer(comments)
-      result = {}
-      comments.each_with_index do |comment, i|
-        print_comment(comment, i)
-        result[i + 1] = comment
-      end
-
-      result
-  end
+  # def self.comment_printer(comments)
+  #     result = {}
+  #     comments.each_with_index do |comment, i|
+  #       print_comment(comment, i)
+  #       result[i + 1] = comment
+  #     end
+  #
+  #     result
+  # end
 
   def self.expand_comment(comments, n)
     i = n.to_i
@@ -94,6 +98,8 @@ ________________________________________________________________________________
     puts result
   end
 
+
+
   def self.print_title_post(post)
     title_post =  <<-heredoc
     #{post.title}      (#{post.subreddit_title})
@@ -108,31 +114,35 @@ ________________________________________________________________________________
 
   end
 
-  def self.expand_comment_plus_one(comments, i)
+  def self.expand_comment_plus_one(comments, input, depth)
+    return if depth < 1
     result = {}
-    nested_comment = comments[i]
+    # binding.pry
+    family = [comments[input]] + comments[input].children
 
-   comments.values.each_with_index do |comment, idx|
-      if idx + 1 < i
-        print_comment(comment, idx)
-      end
-      result[idx + 1] = comment
-      if idx + 1 == i
-        nested_comment.children[0..3].each do |child|
-          print_comment(child)
-          child.children[0..3].each do |grandchild|
-           puts <<-grandchild
-                      child_reply:(#{"*****"})------------------------------------------------------------------------------
-                      User: #{grandchild.author}  (#{grandchild.score})      submitted #{Time.now.hour -  1} hours ago
-                      #{grandchild.body}
-           grandchild
-          end
+   family.each_with_index do |comment, idx|
+     comment_generator(comment, idx + 1)
+     result[idx + 1] = comment
+      if input == idx + 1
+        comment.children.each do |child|
+          expand_comment_plus_one(result, input, depth - 1)
         end
-
-     end
-    end
+      end
+   end
 
    result
+  end
+
+  def self.comment_generator(comment, index=nil)
+    index = comment.parent.nil? ? index : "**" * comment.ancestry.length
+    indent = "     "
+    # debugger
+    comment.parent.nil? ? nil : indent *= comment.ancestry.length
+    puts "#{indent}  -------------------------------------------------------------------------"
+    puts "#{indent}#{index}."
+    puts "#{indent}   by #{comment.author}, #{comment.score}, submitted #{Time.now.hour - 1} hours ago"
+    puts "#{indent}      #{comment.body}"
+
   end
 #   def self.expand_comment(comments, i)
 #     result = {}
@@ -165,15 +175,14 @@ ________________________________________________________________________________
 #           @last_page << @current_page
 #           @current_page = @comments[1].subreddit
 #         end
-
-  def self.print_comment(comment, i=nil)
-    i.nil? ? maybe_counter = "***" : maybe_counter = Proc.new {|arg| arg += 1 }
-    comment = <<-heredoc
-    (#{maybe_counter.is_a?(String) ? maybe_counter : maybe_counter.call(i)})--------------------------------------------------------------------------------
-    User: #{comment.author}  (score:#{comment.score})      submitted #{Time.now.hour -  1} hours ago
-    #{comment.body}
-    heredoc
-
-    puts comment
-  end
+  # def self.print_comment(comment, i=nil)
+  #   i.nil? ? maybe_counter = "***" : maybe_counter = Proc.new {|arg| arg += 1 }
+  #   comment = <<-heredoc
+  #   (#{maybe_counter.is_a?(String) ? maybe_counter : maybe_counter.call(i)})--------------------------------------------------------------------------------
+  #   User: #{comment.author}  (score:#{comment.score})      submitted #{Time.now.hour -  1} hours ago
+  #   #{comment.body}
+  #   heredoc
+  #
+  #   puts comment
+  # end
 end

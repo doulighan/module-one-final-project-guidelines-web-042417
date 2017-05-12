@@ -1,6 +1,6 @@
 class CLI
 
-  attr_accessor :posts, :comments, :current_page, :prev_posts, :prev_comments, :pages, :input, :prev_input
+  attr_accessor :posts, :comments, :current_page, :prev_posts, :prev_comments, :pages, :input, :prev_input, :depth
     def initialize
       @current_page = Post
       @last_page = Post
@@ -9,6 +9,7 @@ class CLI
       @posts = nil
       @prev_input = nil
       @input = nil
+      @depth = 0
       # @pages = []
       # @prev_posts = []
       # @prev_comments = []
@@ -16,8 +17,8 @@ class CLI
 
     def run
       puts "Loading...".white
-      Import.to_database
-      Display.welcome
+      # Import.to_database
+      # Display.welcome
       display_page
       get_input
     end
@@ -35,10 +36,12 @@ class CLI
       if @input.to_i >=1
         @input = @input.to_i
         if @in_comments && @input == @prev_input
-          Display.expand_comment_plus_one(@comments, @input)
+          @depth += 1
+          Display.expand_comment_plus_one(@comments, @input, @depth)
           @prev_input = @input
         elsif @in_comments
-          Display.expand_comment(@comments, @input)
+          @depth += 1
+          Display.expand_comment_plus_one(@comments, @input, @depth)
           @prev_input = @input
           puts "+++++++++++++++++++++++++++++++++++++++++++++++".white
           puts "Enter (s) to go to this subreddit".white
@@ -56,6 +59,7 @@ class CLI
           puts "Enter (q) to quit".white
         end
       else
+        @depth = 0
 
         case @input
 
