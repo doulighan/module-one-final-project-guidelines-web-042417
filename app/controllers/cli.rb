@@ -1,12 +1,13 @@
 class CLI
 
-  attr_accessor :posts, :comments, :current_page, :prev_posts, :prev_comments, :pages, :depth
+  attr_accessor :posts, :comments, :current_page, :prev_posts, :prev_comments, :pages, :main_page
     def initialize
       @current_page = Post
-      @last_page = Post
+      @last_page = []
       @comments = nil
-      @in_comments = false
-      @posts = nil
+      @in_comments = [false, nil]
+      @main_page = true
+      @posts = []
       @pages = []
       @prev_posts = []
       @prev_comments = []
@@ -16,9 +17,11 @@ class CLI
       #
       # Import.to_database
       Display.welcome
-      display_page
+      @posts << Display.top_posts
+      home
 
       ###@posts = front page posts
+      Display.options
       get_input
 
     end
@@ -30,58 +33,80 @@ class CLI
     end
 
     def parse_input
+      @posts.empty? ? @posts << Post : nil
       if @input.to_i >=1
         @input = @input.to_i
-        if @in_comments
-          Display.expand_comment(@comments, @input)
+        if @in_comments[0] && (@in_comments[1] == @input)
+          @comments = Display.expand_comment_plus_one(@comments, @input)
+          @in_comments[1] = nil
+        elsif @in_comments[0]
+          @comments = Display.expand_comment(@comments, @input)
+          @in_comments[1] = @input
         else
-          @in_comments = true
-          @comments = Display.comments_page(@posts, @input)
+          @in_comments[0] = true
+          @comments = Display.comments_page(@posts.pop, @input)
+          @last_page << @current_page
+          @current_page = @comments[1].subreddit
         end
+        # debugger
       else
 
         case @input
         when 'b'
-          back
-          @in_comments = false
+            back
+          @in_comments[0] = false
         when 's'
           go_to_subreddit
-          @in_comments = false
+          @in_comments[0] = false
         when 'h'
-          return_home
-          @in_comments = false
+          home
+          @in_comments[0] = false
         when 'q'
           exit
         else
+        
           @in_comments = false
           puts "That is not a valid input. Please try again"
         end
       end
+      Display.options
       get_input
     end
 
 
 
-    def return_home
-      display_page(Post)
-      @last_page = Post
+    def home
+      if @current_page == Post
+        return
+      else
+         Display.top_posts(Post)
+         @posts << Post
+        @last_page << @current_page
+        @current_page = Post
+      end
     end
 
-    def display_page(current_page=@current_page)
-      posts = Display.top_posts(current_page)
-      @posts = posts
-    end
+    # def display_page(current_page=@current_page)
+    #   @posts = Display.top_posts(current_page)
+    #   @last_page << @current_page
+    #   @main_page ? nil : go_to_subreddit
+    #   # @posts = posts
+    # end
     ### 1 => redirect to post 1
     ###in page
     def go_to_subreddit
-      @posts = Import.subreddit_to_database(@comments[1])
-      @last_page = @comments[1].subreddit
+      @posts << Import.subreddit_to_database(@comments[1])
+      @main_page = false
+      @last_page << @current_page
+      @current_page = @comments[1].subreddit
     end
 
     def back
-      Display.top_posts(@last_page)
-      @current_page = @last_page
+      @last_page.length > 1 ?  @current_page = @last_page.pop : @current_page = @last_page[0]
+      @in_comments = [false, nil]
+      Display.top_posts(@current_page)
     end
+
 
 
 

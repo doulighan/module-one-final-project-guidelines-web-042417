@@ -9,6 +9,13 @@ class Display
     puts ""
   end
 
+  def self.options
+  puts  <<-heredoc
+    'b' to go back, 's' to go to subreddit, 1-10 to select a post or comment,
+    'h' to go home, 'q' to exit.
+    heredoc
+  end
+
   ### gives nothing or a subreddit obj
   def self.top_posts(origin=Post)
     result = {}
@@ -25,7 +32,7 @@ class Display
 
 
   def self.comments_page(top_posts, input)
-
+    binding.pry
     post = top_posts[input]
     comments = Comment.where(parent_id: post[:post_id]).order("score DESC").limit(10)
     print_title_post(post)
@@ -42,21 +49,51 @@ class Display
       result
   end
 
-  def self.expand_comment(comments, n)
-    i = n.to_i
+  def self.expand_comment_plus_one(comments, i)
+    result = {}
     nested_comment = comments[i]
 
     comments.values.each_with_index do |comment, idx|
-      print_comment(comment, idx)
+      if idx + 1 < i
+        print_comment(comment, idx)
+      end
+      result[idx + 1] = comment
       if idx + 1 == i
-        nested_comment.children[0..4].each { |child| print_comment(child)}
-         break
+        nested_comment.children[0..3].each do |child|
+          print_comment(child)
+          child.children[0..3].each do |grandchild|
+           puts <<-grandchild
+               child_reply:(#{"*****"})--------------------------------------------------------------------------------
+               User: #{grandchild.author}  (#{grandchild.score})      submitted #{Time.now.hour -  1} hours ago
+               #{grandchild.body}
+           grandchild
+          end
+        end
+
       end
     end
+
+    result
+  end
+  def self.expand_comment(comments, i)
+    result = {}
+    nested_comment = comments[i]
+
+    comments.values.each_with_index do |comment, idx|
+      print_comment(comment)
+      if idx + 1 == i
+        nested_comment.children[0..3].each do |child|
+          print_comment(child)
+        end
+      end
+      result[idx + 1] = comment
+    end
+
+    result
   end
 
-  def self.thread_header(posts)
-    page_title = posts.is_a?(Array) ? posts.first.subreddit.title.upcase  : "FRONTPAGE"
+  def self.thread_header(page)
+    page_title = page.is_a?(Array) ? page.first.subreddit.title.upcase  : "FRONTPAGE"
     <<-heredoc
     ___________________________________________________________________________
     *****CURRENTLY VIEWING***** :#{page_title}
@@ -90,7 +127,7 @@ class Display
   def self.print_comment(comment, i=nil)
     i.nil? ? maybe_counter = "***" : maybe_counter = Proc.new {|arg| arg += 1 }
     comment = <<-heredoc
-    (#{maybe_counter.is_a?(String) ? maybe_counter : maybe_counter.call(i)})--------------------------------------------------------------------------------
+    #{maybe_counter.is_a?(String) ? 'reply: (' + maybe_counter : '(' + maybe_counter.call(i).to_s})--------------------------------------------------------------------------------
     User: #{comment.author}  (#{comment.score})      submitted #{Time.now.hour -  1} hours ago
     #{comment.body}
     heredoc
